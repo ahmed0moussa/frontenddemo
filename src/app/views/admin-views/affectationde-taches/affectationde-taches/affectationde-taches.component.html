@@ -1,0 +1,105 @@
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0"> Gestion Des Taches</h4>
+            </div><!-- end card header -->
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4 form-group">
+                      <label for="user" class="form-label">Select User</label>
+                      <select class="form-control mb-3" aria-label="user" [(ngModel)]="selectedUserId" (change)="onUserChange()">
+                        <option value="" disabled selected>Select a user</option>
+                        <option *ngFor="let user of listUsers" [value]="user.id">{{ user.firstName }} {{ user.lastName }}</option>
+                      </select>
+                    </div>
+                  </div>
+                
+                  <div class="row">
+                    <div class="col-lg-6 form-group">
+                      <label for="menuItem" class="form-label">Select MenuItem</label>
+                      <select class="form-control mb-3" aria-label="menuItem" [disabled]="!selectedUserId" [(ngModel)]="selectedMenuItemId"(change)="onMenuItemChaange()">
+                        <option value="" disabled selected>Select a menu item</option>
+                        <option *ngFor="let menuItem of (selectedUser?.menuItems || [])" [value]="menuItem.id">{{ menuItem.label }}</option>
+                      </select>
+                    </div>
+                
+                
+              </div>  
+              <div class="row">
+                <div class="col-lg-6">
+                    <table class="table table-hover table-striped align-middle table-nowrap mb-2">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col"> Items </th>
+                                
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="selectedMenuItem && selectedMenuItem.subItems">
+                                <tr *ngFor="let subItem of selectedMenuItem.subItems; let i = index">
+                                    <th scope="row">{{ i + 1 }}</th>
+                                    <td>{{ subItem.label }}</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="SwitchCheck{{subItem.id}}" [checked]="subItem.active" [disabled]="subItem.active" (change)="onCheckboxChange(subItem.id)">
+                                            <label class="form-check-label" for="SwitchCheck{{subItem.id}}">Yes/No</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                        </table>
+                </div>
+                <div class="col-lg-6">
+                    <!-- Tables Without Borders -->
+                    <table class="table table-hover table-striped align-middle table-nowrap mb-2">
+                        <thead class="table-secondary">
+                          <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">menu Item</th>
+                            <th scope="col">taches efectés</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngFor="let menuItem of selectedUser?.menuItems | filterActive; let i = index">
+                            <!-- Main menu item row -->
+                            <tr>
+                              <th scope="row">{{ i + 1 }}</th>
+                              <th>{{ menuItem.label }}</th>
+                              <td></td>
+                              <td >
+                                
+                              </td>
+                            </tr>
+                      
+                            <!-- Sub Items rows -->
+                            <ng-container *ngFor="let subItem of menuItem.subItems | filterActive; let j = index">
+                              <tr>
+                                <th scope="row">{{ i + 1 }}.{{ j + 1 }}</th>
+                                <td></td>
+                                <td>{{ subItem.label }}</td>
+                                <td class=" d-flex justify-content-end">
+                                  <div class="hstack gap-3 fs-base ">
+                                    <a   (click)="onDeleteIconClick(subItem.id)"><i class="fa fa-trash" style="color: red;"></i></a>
+                                  </div>
+                                </td>
+                              </tr>
+                            </ng-container>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                      
+                </div>
+              </div>
+            </div><!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end col -->
+</div>

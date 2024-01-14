@@ -1,0 +1,184 @@
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ngx-simplebar id="scrollbar" style="height: 100%;" data-simplebar-track="light" class="h-100 sidebar simplebar-scrollable-y">
+            <div class="">
+              <div class="sidebar-brand-text mx-3 logo1">scolarity <sup>iset</sup></div>
+              <hr class="sidebar-divider my-0">
+            </div>
+          
+            <div class="container-fluid">
+              <div id="two-column-menu">
+              </div>
+          
+              <ul class="navbar-nav" id="navbar-nav">
+                <ng-container *ngFor="let item of menuItems">
+                  <li class="nav-item" *ngIf="item.title"><a  href="javascript:void(0);" class="nav-link menu-link"
+                   aria-expanded="false" (click)="toggleItem($event)">
+                   <i class="{{ item.icon }}"></i>
+                   <span> {{ item.label | translate }}</span>
+                   
+                 </a></li>
+          
+                  <li class="nav-item" *ngIf="item.active && item.subItems">
+                    <a *ngIf="hasItems(item)" href="javascript:void(0);" class="nav-link menu-link"
+                       data-toggle="collapse"
+                      aria-expanded="false" (click)="toggleItem($event)">
+                      <i class="{{ item.icon }}"></i>
+                      <span> {{ item.label | translate }}</span>
+                      
+                    </a>
+          
+                    <a [routerLink]="item.link" *ngIf="!hasItems(item)" class="side-nav-link-ref nav-link menu-link"
+                      (click)="toggleParentItem($event)">
+                      <i class="bx {{ item.icon }} icon nav-icon" *ngIf="item.active &&item.icon" ></i>
+                      <span class=""> {{ item.label | translate }}</span>
+                     
+                    </a>
+          
+                    <div class="collapse menu-dropdown mega-dropdown-menu" *ngIf="item.subItems">
+                      <ul *ngIf="item.subItems" class="nav flex-column" aria-expanded="false">
+                        <li *ngFor="let subitem of item.subItems" class="nav-item">
+                          <a [routerLink]="subitem.link" *ngIf="subitem.active" class="nav-link"
+                            [attr.data-parent]="subitem.id" (click)="updateActive($event)" aria-expanded="false">
+                            {{ subitem.label | translate}}
+                          </a>
+          
+                          <a *ngIf="hasItems(subitem)" class="nav-link" href="javascript:void(0);"
+                            [attr.data-parent]="subitem.id" data-toggle="collapse" aria-expanded="false"
+                            (click)="toggleSubItem($event)">
+                            {{ subitem.label | translate}}
+                          </a>
+          
+                          <div class="collapse menu-dropdown sub-menu" *ngIf="hasItems(subitem)">
+                            <ul *ngIf="hasItems(subitem)" class="nav flex-column" aria-expanded="false">
+                              <li *ngFor="let subSubitem of subitem.subItems" class="nav-item">
+                                <a [routerLink]="subSubitem.link" *ngIf="subSubitem.active"
+                                  class="nav-link" [attr.data-parent]="subSubitem.id" (click)="updateActive($event)"
+                                  aria-expanded="false">
+                                  {{ subSubitem.label | translate }}
+                                </a>
+                                <!-- ... existing code ... -->
+                              </li>
+                            </ul>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+          </ngx-simplebar>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    
+                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 ">
+                    <!-- <img src="../../../assets/template/img/iset-sousse.png" width="150px">  -->
+                    </div>
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{data.firstName}} {{data.lastName}}</span>
+                                <img class="img-profile rounded-circle"
+                                    src="../../../assets/template/img/undraw_profile_1.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <router-outlet></router-outlet>
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; scolarity 2023</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary"  (click)="logout()" data-dismiss="modal">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
